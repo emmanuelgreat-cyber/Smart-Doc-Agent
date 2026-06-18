@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Document Agent</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        textarea {
+            width: 100%;
+            height: 300px;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Smart Document Agent</h1>
+
+    <input type="file" id="pdfFile" accept=".pdf">
+
+    <br>
+
+    <button onclick="extractText()">Extract PDF</button>
+
+    <h3>Output</h3>
+
+    <textarea id="output" placeholder="PDF text will appear here..."></textarea>
+
+    <script>
+        async function extractText() {
+
+    try {
+
+        document.getElementById("output").value = "Loading PDF...";
+
+        const fileInput = document.getElementById("pdfFile");
+
+        if (fileInput.files.length === 0) {
+            alert("Please upload a PDF.");
+            return;
+        }
+
+        const file = fileInput.files[0];
+
+        const arrayBuffer = await file.arrayBuffer();
+
+        const pdf = await pdfjsLib.getDocument({
+            data: arrayBuffer
+        }).promise;
+
+        let fullText = "";
+
+        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+
+            const page = await pdf.getPage(pageNum);
+
+            const content = await page.getTextContent();
+
+            const text = content.items
+                .map(item => item.str)
+                .join(" ");
+
+            fullText += text + "\n\n";
+        }
+
+        document.getElementById("output").value = fullText;
+
+    } catch (error) {
+
+        document.getElementById("output").value =
+            "ERROR:\n" + error.message;
+
+        console.error(error);
+    }
+}
+    </script>
+
+</body>
+</html>
+       
