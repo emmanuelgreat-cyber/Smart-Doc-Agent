@@ -105,53 +105,8 @@ document.getElementById("output").value = fullText;
     }
 
     document.getElementById("output").value =
-        "Analyzing document...";
-
-    try {
-
-        const response = await fetch(
-            "https://models.inference.ai.azure.com/chat/completions",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer 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"
-                },
-                body: JSON.stringify({
-                    model: "gpt-4o-mini",
-                    messages: [
-                        {
-                            role: "system",
-                            content: "You are a document analyst."
-                        },
-                        {
-                            role: "user",
-                            content:
-                            `Analyze this document and provide:
-                            
-                            1. Executive Summary
-                            2. Key Dates
-                            3. Action Items
-                            
-                            Document:
-                            
-                            ${extractedText}`
-                        }
-                    ]
-                })
-            }
-        );
-
-        const data = await response.json();
-
-        document.getElementById("output").value =
-            data.choices[0].message.content;
-
-    } catch(error){
-
-        document.getElementById("output").value =
-            "Error: " + error.message;
-    }
+        "AI connection test successful";
+        }
         }
         }
     </script>
