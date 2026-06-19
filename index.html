@@ -40,11 +40,16 @@
 
     <button onclick="extractText()">Extract PDF</button>
 
+    <button onclick="analyzeDocument()">
+    Analyze Document
+    </button>
+    
     <h3>Output</h3>
 
     <textarea id="output" placeholder="PDF text will appear here..."></textarea>
 
     <script>
+        let extractedText = "";
         async function extractText() {
 
     try {
@@ -81,7 +86,8 @@
             fullText += text + "\n\n";
         }
 
-        document.getElementById("output").value = fullText;
+        extractedText = fullText;
+document.getElementById("output").value = fullText;
 
     } catch (error) {
 
@@ -91,6 +97,16 @@
         console.error(error);
     }
 }
+        async function analyzeDocument() {
+
+    if (!extractedText) {
+        alert("Please extract a PDF first.");
+        return;
+    }
+
+    document.getElementById("output").value =
+        "AI analysis coming soon...";
+        }
     </script>
 
 </body>
