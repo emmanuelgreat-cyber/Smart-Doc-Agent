@@ -69,7 +69,9 @@ onclick="downloadReport()"
 style="cursor:pointer; float: right; margin-top:15px;">
     
     <h3>Output</h3>
-
+    <div id="loader" style="display:none;">
+⏳ Thinking...
+    </div>
     <textarea id="output" placeholder="PDF text will appear here..."></textarea>
 
     <script>
@@ -112,10 +114,13 @@ style="cursor:pointer; float: right; margin-top:15px;">
         }
 
         extractedText = fullText;
+        
+        document.getElementById("loader").style.display = "none";
 document.getElementById("output").value = fullText;
 
     } catch (error) {
-
+        
+        document.getElementById("loader").style.display = "none";
         document.getElementById("output").value =
             "ERROR:\n" + error.message;
 
@@ -128,7 +133,7 @@ document.getElementById("output").value = fullText;
         alert("Please extract a PDF first.");
         return;
     }
-
+    document.getElementById("loader").style.display = "none";
     document.getElementById("output").value =
         "Analyzing document...";
 
@@ -197,13 +202,18 @@ role: "assistant",
 content: String(answer)
 });
 
+document.getElementById("loader").style.display = "none";
+
 document.getElementById("output").value =
 answer;
         
     } catch(error){
 
-        document.getElementById("output").value =
-            "Error: " + error.message;
+document.getElementById("loader").style.display = "none";
+
+document.getElementById("output").value =
+"Error: " + error.message;
+
     }
   }
         async function askQuestion() {
@@ -220,7 +230,8 @@ answer;
         alert("Extract a PDF first.");
         return;
     }
-
+            
+    document.getElementById("loader").style.display = "none";
     document.getElementById("output").value =
         "Thinking...";
 
@@ -285,8 +296,11 @@ answer;
 
     } catch(error){
 
-        document.getElementById("output").value =
-            "Error: " + error.message;
+document.getElementById("loader").style.display = "none";
+
+document.getElementById("output").value =
+"Error: " + error.message;
+
     }
         }
         async function detectDocument() {
@@ -295,7 +309,8 @@ answer;
         alert("Please extract a PDF first.");
         return;
     }
-
+            
+    document.getElementById("loader").style.display = "none";
     document.getElementById("output").value =
         "Detecting document type...";
 
@@ -359,7 +374,8 @@ if (!data.choices) {
 
 const answer =
 data.choices[0].message.content;
-
+        
+document.getElementById("loader").style.display = "none";
 document.getElementById("output").value =
 answer;
 
