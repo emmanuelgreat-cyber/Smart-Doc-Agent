@@ -28,6 +28,18 @@
             margin-top: 10px;
             cursor: pointer;
         }
+
+        #downloadIcon:active{
+transform:scale(0.9);
+        }
+
+        #downloadIcon{
+transition:0.3s;
+}
+
+#downloadIcon:hover{
+transform:scale(1.2);
+}
     </style>
 </head>
 <body>
@@ -48,6 +60,13 @@
     <button onclick="detectDocument()">
 Detect Document Type
     </button>
+
+    <img
+src="https://cdn-icons-png.flaticon.com/512/724/724933.png"
+width="40"
+id="downloadIcon"
+onclick="downloadReport()"
+style="cursor:pointer; margin-top:15px;">
     
     <h3>Output</h3>
 
@@ -289,6 +308,32 @@ ${extractedText}`
         document.getElementById("output").value =
             "Error: " + error.message;
     }
+        }
+        function downloadReport() {
+
+    const report =
+    document.getElementById("output").value;
+
+    if (!report) {
+        alert("No report available.");
+        return;
+    }
+
+    const blob = new Blob(
+        [report],
+        {type:"text/plain"}
+    );
+
+    const link =
+    document.createElement("a");
+
+    link.href =
+    URL.createObjectURL(blob);
+
+    link.download =
+    "AI_Report.txt";
+
+    link.click();
         }
     </script>
     <center>
