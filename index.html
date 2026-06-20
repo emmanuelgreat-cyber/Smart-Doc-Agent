@@ -261,8 +261,21 @@ ${extractedText}`
 
         const data = await response.json();
 
-        document.getElementById("output").value =
-            data.choices[0].message.content;
+console.log(data);
+
+if (!data.choices) {
+    document.getElementById("output").value =
+        "API Error:\n" +
+        JSON.stringify(data, null, 2);
+
+    return;
+}
+
+const answer =
+data.choices[0].message.content;
+
+document.getElementById("output").value =
+answer;
 
     } catch(error){
 
@@ -326,10 +339,23 @@ ${extractedText}`
             }
         );
 
-        const data = await response.json();
+         const data = await response.json();
 
-        document.getElementById("output").value =
-            data.choices[0].message.content;
+console.log(data);
+
+if (!data.choices) {
+    document.getElementById("output").value =
+        "API Error:\n" +
+        JSON.stringify(data, null, 2);
+
+    return;
+}
+
+const answer =
+data.choices[0].message.content;
+
+document.getElementById("output").value =
+answer;
 
     } catch(error){
 
