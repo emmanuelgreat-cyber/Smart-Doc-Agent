@@ -108,7 +108,7 @@ style="cursor:pointer; float: right; margin-top:15px;">
                 .map(item => item.str)
                 .join(" ");
 
-            fullText += text + "\n\n";
+            fullText += `[Page ${pageNum}]\n${text}\n\n`;
         }
 
         extractedText = fullText;
@@ -239,7 +239,7 @@ answer;
 
 {
 role:"system",
-content:"You answer questions about uploaded documents."
+content:" Answer questions using the document. If information comes from a page, include: Source: Page X. Be concise."
 },
 
 ...chatHistory,
