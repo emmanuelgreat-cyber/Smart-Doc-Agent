@@ -169,6 +169,19 @@ ${extractedText}`
 
         const data = await response.json();
 
+console.log(data);
+
+if (!data.choices) {
+    document.getElementById("output").value =
+        "API Error:\n" +
+        JSON.stringify(data, null, 2);
+
+    return;
+}
+
+const answer =
+data.choices[0].message.content;
+
 chatHistory.push({
 role:"user",
 content:question
@@ -176,12 +189,12 @@ content:question
 
 chatHistory.push({
 role:"assistant",
-content:data.choices[0].message.content
+content:answer
 });
 
 document.getElementById("output").value =
-data.choices[0].message.content;
-
+answer;
+        
     } catch(error){
 
         document.getElementById("output").value =
