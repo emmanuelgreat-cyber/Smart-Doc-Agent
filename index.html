@@ -188,8 +188,13 @@ content:question
 });
 
 chatHistory.push({
-role:"assistant",
-content:answer
+role: "user",
+content: String(question)
+});
+
+chatHistory.push({
+role: "assistant",
+content: String(answer)
 });
 
 document.getElementById("output").value =
@@ -238,16 +243,17 @@ answer;
                      messages: [
 
 {
-role:"system",
-content:" Answer questions using the document. If information comes from a page, include: Source: Page X. Be concise."
+role: "system",
+content: "Answer questions about uploaded documents. Be concise and include source pages if possible."
 },
 
-...chatHistory,
+...chatHistory.filter(
+msg => typeof msg.content === "string"
+),
 
 {
-role:"user",
-content:
-`${question}
+role: "user",
+content: `${question}
 
 Document:
 
