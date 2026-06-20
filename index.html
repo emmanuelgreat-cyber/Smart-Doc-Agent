@@ -74,6 +74,7 @@ style="cursor:pointer; float: right; margin-top:15px;">
 
     <script>
         let extractedText = "";
+        let chatHistory = [];
         async function extractText() {
 
     try {
@@ -168,8 +169,18 @@ ${extractedText}`
 
         const data = await response.json();
 
-        document.getElementById("output").value =
-            data.choices[0].message.content;
+chatHistory.push({
+role:"user",
+content:question
+});
+
+chatHistory.push({
+role:"assistant",
+content:data.choices[0].message.content
+});
+
+document.getElementById("output").value =
+data.choices[0].message.content;
 
     } catch(error){
 
@@ -211,22 +222,26 @@ ${extractedText}`
 
                     model: "llama-3.1-8b-instant",
 
-                    messages: [
-                        {
-                            role: "system",
-                            content:
-                            "Answer questions about the uploaded document. Answer very briefly. If the user asks for a count, return only the total number. Do not list every item unless explicitly asked."
-                        },
-                        {
-                            role: "user",
-                            content:
+                     messages: [
+
+{
+role:"system",
+content:"You answer questions about uploaded documents."
+},
+
+...chatHistory,
+
+{
+role:"user",
+content:
 `${question}
 
 Document:
 
 ${extractedText}`
-                        }
-                    ]
+}
+
+]
                 })
             }
         );
