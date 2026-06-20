@@ -380,7 +380,8 @@ document.getElementById("output").value =
 answer;
 
     } catch(error){
-
+        
+        document.getElementById("loader").style.display = "none";
         document.getElementById("output").value =
             "Error: " + error.message;
     }
