@@ -153,6 +153,71 @@ ${extractedText}`
             "Error: " + error.message;
     }
   }
+        async function askQuestion() {
+
+    const question =
+        document.getElementById("question").value;
+
+    if (!question) {
+        alert("Type a question first.");
+        return;
+    }
+
+    if (!extractedText) {
+        alert("Extract a PDF first.");
+        return;
+    }
+
+    document.getElementById("output").value =
+        "Thinking...";
+
+    try {
+
+        const response = await fetch(
+            "https://api.groq.com/openai/v1/chat/completions",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization":
+                    "Bearer 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"
+                },
+
+                body: JSON.stringify({
+
+                    model: "llama-3.1-8b-instant",
+
+                    messages: [
+                        {
+                            role: "system",
+                            content:
+                            "Answer questions about the uploaded document."
+                        },
+                        {
+                            role: "user",
+                            content:
+`${question}
+
+Document:
+
+${extractedText}`
+                        }
+                    ]
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        document.getElementById("output").value =
+            data.choices[0].message.content;
+
+    } catch(error){
+
+        document.getElementById("output").value =
+            "Error: " + error.message;
+    }
+        }
     </script>
     <center>
     <input type="text"
