@@ -47,7 +47,7 @@ transform:scale(1.2);
     <h1>Smart Document Agent</h1>
     <hr>
 
-    <input type="file" id="pdfFile" accept=".pdf">
+    <input type="file" id="pdfFile" accept=".pdf" multiple>
 
     <br>
 
@@ -79,6 +79,7 @@ style="cursor:pointer; float: right; margin-top:15px;">
     <div id="results"></div>
 
     <script>
+        let allDocuments = [];
         let extractedText = "";
         let chatHistory = [];
         async function extractText() {
@@ -94,7 +95,9 @@ style="cursor:pointer; float: right; margin-top:15px;">
             return;
         }
 
-        const file = fileInput.files[0];
+        allDocuments = [];
+
+for(const file of fileInput.files){
 
         const arrayBuffer = await file.arrayBuffer();
 
@@ -117,7 +120,26 @@ style="cursor:pointer; float: right; margin-top:15px;">
             fullText += `[Page ${pageNum}]\n${text}\n\n`;
         }
 
-        extractedText = fullText;
+        allDocuments.push({
+
+name:file.name,
+
+content:fullText
+
+});
+}
+        extractedText =
+allDocuments.map(doc =>
+
+`Document:
+${doc.name}
+
+${doc.content}`
+
+).join("\n\n");
+
+document.getElementById("output").value =
+extractedText;
         
         document.getElementById("loader").style.display = "none";
 document.getElementById("output").value = fullText;
