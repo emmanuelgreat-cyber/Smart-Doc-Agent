@@ -52,6 +52,18 @@ transform:scale(0.9);
 #actionIcon:hover{
 transform:scale(1.2);
 }
+
+        #brainIcon{
+transition:0.3s;
+}
+
+#brainIcon:hover{
+transform:scale(1.2);
+}
+
+#brainIcon:active{
+transform:scale(0.9);
+}
     </style>
 </head>
 <body>
@@ -88,7 +100,15 @@ width="40"
 id="actionIcon"
 onclick="extractActions()"
 style="cursor:pointer; float: right; margin-left:10px;">
+    <br>
 
+<img
+src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png"
+width="40"
+id="brainIcon"
+onclick="generateQuiz()"
+style="cursor:pointer; float: right; margin-left:10px;">
+    
     <img
 src="https://cdn-icons-png.flaticon.com/512/724/724933.png"
 width="40"
@@ -584,6 +604,121 @@ ${extractedText.slice(0,3000)}`
         document.getElementById("output").innerHTML =
         error.message;
     }
+        }
+
+        async function generateQuiz(){
+
+if(!extractedText){
+
+alert("Extract a document first.");
+
+return;
+}
+
+document.getElementById(
+"loader"
+).style.display="block";
+
+try{
+
+const response=
+await fetch(
+"https://api.groq.com/openai/v1/chat/completions",
+{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":"application/json",
+
+"Authorization":
+"Bearer YOUR_GROQ_API_KEY"
+
+},
+
+body:JSON.stringify({
+
+model:"llama-3.1-8b-instant",
+
+messages:[
+
+{
+role:"system",
+
+content:
+`Create 5 flashcards.
+
+Format nicely:
+
+**Question**
+question text
+
+*Answer*
+answer text`
+},
+
+{
+role:"user",
+
+content:
+extractedText.slice(0,3000)
+}
+
+]
+
+})
+
+}
+
+);
+
+const data=
+await response.json();
+
+if(!data.choices){
+
+document.getElementById(
+"loader"
+).style.display="none";
+
+document.getElementById(
+"output"
+).innerHTML=
+JSON.stringify(data,null,2);
+
+return;
+}
+
+const answer=
+data.choices[0]
+.message.content;
+
+document.getElementById(
+"loader"
+).style.display="none";
+
+document.getElementById(
+"output"
+).innerHTML=
+answer
+.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>")
+.replace(/\*(.*?)\*/g,"<i>$1</i>")
+.replace(/\n/g,"<br>");
+
+}catch(error){
+
+document.getElementById(
+"loader"
+).style.display="none";
+
+document.getElementById(
+"output"
+).innerHTML=
+error.message;
+
+}
+
         }
     </script>
     <center>
