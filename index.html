@@ -40,6 +40,18 @@ transition:0.3s;
 #downloadIcon:hover{
 transform:scale(1.2);
 }
+
+        #actionIcon{
+transition:0.3s;
+}
+
+#actionIcon:active{
+transform:scale(0.9);
+}
+
+#actionIcon:hover{
+transform:scale(1.2);
+}
     </style>
 </head>
 <body>
@@ -71,6 +83,13 @@ Detect Document Type
     </button>
 
     <img
+src="https://cdn-icons-png.flaticon.com/512/942/942748.png"
+width="40"
+id="actionIcon"
+onclick="extractActions()"
+style="cursor:pointer; float: right; margin-left:10px;">
+
+    <img
 src="https://cdn-icons-png.flaticon.com/512/724/724933.png"
 width="40"
 id="downloadIcon"
@@ -83,7 +102,16 @@ style="cursor:pointer; float: right; margin-top:15px;">
 ⏳ Thinking...
     </div>
     
-    <textarea id="output" placeholder="PDF text will appear here..."></textarea>
+<div id="output"
+style="
+border:1px solid #ccc;
+padding:15px;
+min-height:250px;
+overflow:auto;
+border-radius:10px;
+">
+Results will appear here...
+</div>
 
     <div id="results"></div>
 
@@ -95,8 +123,8 @@ style="cursor:pointer; float: right; margin-top:15px;">
 
     try {
 
-        document.getElementById("output").value = "Loading PDF...";
-
+        document.getElementById("output").innerHTML =
+"Loading PDF...";
         const fileInput = document.getElementById("pdfFile");
 
         if (fileInput.files.length === 0) {
@@ -190,8 +218,8 @@ extractedText;
         return;
     }
     document.getElementById("loader").style.display = "none";
-    document.getElementById("output").value =
-        "Analyzing document...";
+    document.getElementById("output").innerHTML =
+"Analysing...";
 
     try {
 
@@ -262,8 +290,10 @@ content: String(answer)
 
 document.getElementById("loader").style.display = "none";
 
-document.getElementById("output").value =
-answer;
+document.getElementById("output").innerHTML = answer
+.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>")
+.replace(/\*(.*?)\*/g,"<i>$1</i>")
+.replace(/\n/g,"<br>");
         
     } catch(error){
 
@@ -290,8 +320,8 @@ document.getElementById("output").value =
     }
             
     document.getElementById("loader").style.display = "none";
-    document.getElementById("output").value =
-        "Thinking...";
+    document.getElementById("output").innerHTML =
+"Thinking...";
 
     try {
 
@@ -352,8 +382,10 @@ data.choices[0].message.content;
 
 document.getElementById("loader").style.display = "none";
 
-document.getElementById("output").value =
-answer;
+document.getElementById("output").innerHTML = answer
+.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>")
+.replace(/\*(.*?)\*/g,"<i>$1</i>")
+.replace(/\n/g,"<br>");
 
     } catch(error){
 
@@ -372,9 +404,8 @@ document.getElementById("output").value =
     }
             
     document.getElementById("loader").style.display = "none";
-    document.getElementById("output").value =
-        "Detecting document type...";
-
+    document.getElementById("output").innerHTML =
+"Detecting document type...";
     try {
 
         document.getElementById("loader").style.display = "block";
@@ -439,8 +470,10 @@ data.choices[0].message.content;
         
 document.getElementById("loader").style.display = "none";
         
-document.getElementById("output").value =
-answer;
+document.getElementById("output").innerHTML = answer
+.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>")
+.replace(/\*(.*?)\*/g,"<i>$1</i>")
+.replace(/\n/g,"<br>");
 
     } catch(error){
         
@@ -452,7 +485,7 @@ answer;
         function downloadReport() {
 
     const report =
-    document.getElementById("output").value;
+    document.getElementById("output").innerText;
 
     if (!report) {
         alert("No report available.");
@@ -474,6 +507,83 @@ answer;
     "AI_Report.txt";
 
     link.click();
+        }
+        async function extractActions(){
+
+    if(!extractedText){
+        alert("Extract a PDF first.");
+        return;
+    }
+
+    document.getElementById("loader").style.display="block";
+
+    try{
+
+        const response = await fetch(
+        "https://api.groq.com/openai/v1/chat/completions",
+        {
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json",
+
+                "Authorization":
+                "Bearer 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"
+            },
+
+            body:JSON.stringify({
+
+                model:"llama-3.1-8b-instant",
+
+                messages:[
+
+                {
+                    role:"system",
+
+                    content:
+                    "Extract tasks, deadlines and action items from documents."
+                },
+
+                {
+                    role:"user",
+
+                    content:
+`Extract action items from:
+
+${extractedText.slice(0,3000)}`
+                }
+
+                ]
+            })
+        });
+
+        const data = await response.json();
+
+        if(!data.choices){
+
+            document.getElementById("output").value=
+            JSON.stringify(data,null,2);
+
+            return;
+        }
+
+        const answer=
+        data.choices[0].message.content;
+
+        document.getElementById("loader").style.display="none";
+
+        document.getElementById("output").innerHTML = answer
+.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>")
+.replace(/\*(.*?)\*/g,"<i>$1</i>")
+.replace(/\n/g,"<br>");
+
+    }catch(error){
+
+        document.getElementById("loader").style.display="none";
+
+        document.getElementById("output").value=
+        error.message;
+    }
         }
     </script>
     <center>
