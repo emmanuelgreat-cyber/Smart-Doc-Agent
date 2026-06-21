@@ -47,6 +47,14 @@ transform:scale(1.2);
     <h1>Smart Document Agent</h1>
     <hr>
 
+    <div id="documentsPanel">
+
+<h3>📂 Uploaded Documents</h3>
+
+<ul id="documentList"></ul>
+
+    </div>
+
     <input type="file" id="pdfFile" accept=".pdf" multiple>
 
     <br>
@@ -96,6 +104,7 @@ style="cursor:pointer; float: right; margin-top:15px;">
         }
 
          allDocuments = [];
+        document.getElementById("documentList").innerHTML = "";
 
 for(const file of fileInput.files){
 
@@ -137,6 +146,16 @@ for(const file of fileInput.files){
        content:fullText
 
     });
+
+    const list =
+document.getElementById("documentList");
+
+const item =
+document.createElement("li");
+
+item.textContent = file.name;
+
+list.appendChild(item);
 
 }
         extractedText =
