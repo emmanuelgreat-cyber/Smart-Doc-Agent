@@ -197,7 +197,7 @@ ${doc.content}`
 
 ).join("\n\n");
 
-document.getElementById("output").value =
+document.getElementById("output").innerHTML =
 extractedText;
         
         document.getElementById("loader").style.display = "none";
@@ -205,7 +205,7 @@ extractedText;
     } catch (error) {
         
         document.getElementById("loader").style.display = "none";
-        document.getElementById("output").value =
+        document.getElementById("output").innerHTML =
             "ERROR:\n" + error.message;
 
         console.error(error);
@@ -299,7 +299,7 @@ document.getElementById("output").innerHTML = answer
 
 document.getElementById("loader").style.display = "none";
 
-document.getElementById("output").value =
+document.getElementById("output").innerHTML =
 "Error: " + error.message;
 
     }
@@ -391,7 +391,7 @@ document.getElementById("output").innerHTML = answer
 
 document.getElementById("loader").style.display = "none";
 
-document.getElementById("output").value =
+document.getElementById("output").innerHTML =
 "Error: " + error.message;
 
     }
@@ -478,7 +478,7 @@ document.getElementById("output").innerHTML = answer
     } catch(error){
         
         document.getElementById("loader").style.display = "none";
-        document.getElementById("output").value =
+        document.getElementById("output").innerHTML =
             "Error: " + error.message;
     }
         }
@@ -581,7 +581,7 @@ ${extractedText.slice(0,3000)}`
 
         document.getElementById("loader").style.display="none";
 
-        document.getElementById("output").value=
+        document.getElementById("output").innerHTML =
         error.message;
     }
         }
