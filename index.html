@@ -69,10 +69,14 @@ onclick="downloadReport()"
 style="cursor:pointer; float: right; margin-top:15px;">
     
     <h3>Output</h3>
+    
     <div id="loader" style="display:none;">
 ⏳ Thinking...
     </div>
+    
     <textarea id="output" placeholder="PDF text will appear here..."></textarea>
+
+    <div id="results"></div>
 
     <script>
         let extractedText = "";
@@ -203,6 +207,7 @@ role: "assistant",
 content: String(answer)
 });
 
+
 document.getElementById("loader").style.display = "none";
 
 document.getElementById("output").value =
@@ -292,6 +297,8 @@ if (!data.choices) {
 
 const answer =
 data.choices[0].message.content;
+
+document.getElementById("loader").style.display = "none";
 
 document.getElementById("output").value =
 answer;
