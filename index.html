@@ -165,41 +165,41 @@ Results will appear here...
 for(const file of fileInput.files){
     
 
-    let fullText="";
+    let fullText = "";
 
 if(file.type.includes("image")){
 
-fullText=
+fullText =
 await extractImageText(file);
 
 }else{
 
-const arrayBuffer=
+const arrayBuffer =
 await file.arrayBuffer();
 
-const pdf=
+const pdf =
 await pdfjsLib.getDocument({
-data:arrayBuffer
+data: arrayBuffer
 }).promise;
 
 for(
-let pageNum=1;
-pageNum<=pdf.numPages;
+let pageNum = 1;
+pageNum <= pdf.numPages;
 pageNum++
 ){
 
-const page=
+const page =
 await pdf.getPage(pageNum);
 
-const content=
+const content =
 await page.getTextContent();
 
-const text=
+const text =
 content.items
-.map(item=>item.str)
+.map(item => item.str)
 .join(" ");
 
-fullText+=text+"\n\n";
+fullText += text + "\n\n";
 
 }
 
