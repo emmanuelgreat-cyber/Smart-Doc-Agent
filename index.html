@@ -270,6 +270,7 @@ console.error(error);
   async function analyzeDocument() {
 
     if (!extractedText) {
+        document.getElementById("loader").style.display="none";
         alert("Please extract a PDF first.");
         return;
     }
@@ -366,11 +367,13 @@ document.getElementById("output").innerHTML =
         document.getElementById("question").value;
 
     if (!question) {
+        document.getElementById("loader").style.display="none";
         alert("Type a question first.");
         return;
     }
 
     if (!extractedText) {
+        document.getElementById("loader").style.display="none";
         alert("Extract a PDF first.");
         return;
     }
@@ -455,6 +458,7 @@ document.getElementById("output").innerHTML =
         async function detectDocument() {
 
     if (!extractedText) {
+        document.getElementById("loader").style.display="none";
         alert("Please extract a PDF first.");
         return;
     }
@@ -567,6 +571,7 @@ document.getElementById("output").innerHTML = answer
         async function extractActions(){
 
     if(!extractedText){
+        document.getElementById("loader").style.display="none";
         alert("Extract a PDF first.");
         return;
     }
@@ -645,7 +650,7 @@ ${extractedText.slice(0,3000)}`
         async function generateQuiz(){
 
 if(!extractedText){
-
+document.getElementById("loader").style.display="none";
 alert("Extract a document first.");
 
 return;
