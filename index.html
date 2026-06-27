@@ -147,15 +147,11 @@ Results will appear here...
         let extractedText = "";
         let chatHistory = [];
              
-async function extractText() {
+ async function extractText(){
 
-try {
-    document.getElementById(
-"loader"
-).style.display="block";
+try{
 
-document.getElementById("output").innerHTML =
-"📄 Loading...";
+document.getElementById("loader").style.display="block";
 
 const fileInput =
 document.getElementById("pdfFile");
@@ -163,6 +159,8 @@ document.getElementById("pdfFile");
 if(fileInput.files.length===0){
 
 alert("Please upload a file");
+
+document.getElementById("loader").style.display="none";
 
 return;
 
@@ -217,44 +215,25 @@ fullText += text + "\n\n";
 }
 
 allDocuments.push({
-
 name:file.name,
-
 content:fullText
-
 });
-
-const list =
-document.getElementById(
-"documentList"
-);
-
-const item =
-document.createElement(
-"li"
-);
-
-item.textContent =
-file.name;
-
-list.appendChild(item);
 
 }
 
 extractedText =
-allDocuments.map(doc=>
-
-`Document:
-${doc.name}
-
-${doc.content}`
-
-).join("\n\n");
+allDocuments
+.map(doc=>doc.content)
+.join("\n\n");
 
 document.getElementById(
 "output"
-).innerHTML =
+).innerHTML=
 extractedText;
+
+document.getElementById(
+"loader"
+).style.display="none";
 
 }catch(error){
 
@@ -264,13 +243,14 @@ document.getElementById(
 
 document.getElementById(
 "output"
-).innerHTML =
-"ERROR:<br>" +
-error.message;
+).innerHTML=
+"ERROR:<br>"+error.message;
 
 console.error(error);
 
-    }
+}
+
+ }
  
   async function analyzeDocument() {
 
