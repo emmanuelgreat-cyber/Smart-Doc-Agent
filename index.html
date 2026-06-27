@@ -146,111 +146,100 @@ Results will appear here...
         let allDocuments = [];
         let extractedText = "";
         let chatHistory = [];
-        async function extractText() {
+             
+async function extractText() {
 
-    try {
+try {
 
-        document.getElementById("output").innerHTML =
-"Loading PDF...";
-        const fileInput = document.getElementById("pdfFile");
+document.getElementById("output").innerHTML =
+"📄 Loading...";
 
-        if (fileInput.files.length === 0) {
-            alert("Please upload a PDF.");
-            return;
-        }
+const fileInput =
+document.getElementById("pdfFile");
 
-         allDocuments = [];
-        document.getElementById("documentList").innerHTML = "";
+if(fileInput.files.length===0){
 
-for(const file of fileInput.files){
-    
+alert("Please upload a file");
 
-    let fullText = "";
-
-if(file.type.includes("image")){
-
-    fullText =
-    await extractImageText(file);
-
-}else{
-
-    const arrayBuffer =
-    await file.arrayBuffer();
-
-    const pdf =
-    await pdfjsLib.getDocument({
-        data: arrayBuffer
-    }).promise;
-
-    for(
-        let pageNum = 1;
-        pageNum <= pdf.numPages;
-        pageNum++
-    ){
-
-        const page =
-        await pdf.getPage(pageNum);
-
-        const content =
-        await page.getTextContent();
-
-        const text =
-        content.items
-        .map(item => item.str)
-        .join(" ");
-
-        fullText += text + "\n\n";
-    }
+return;
 
 }
 
-    const pdf =
-    await pdfjsLib.getDocument({
-        data:arrayBuffer
-    }).promise;
+allDocuments=[];
 
-    for(
-      let pageNum = 1;
-      pageNum <= pdf.numPages;
-      pageNum++
-    ){
+document.getElementById(
+"documentList"
+).innerHTML="";
 
-        const page =
-        await pdf.getPage(pageNum);
+for(const file of fileInput.files){
 
-        const content =
-        await page.getTextContent();
+let fullText="";
 
-        const text =
-        content.items
-        .map(item => item.str)
-        .join(" ");
+if(file.type.includes("image")){
 
-        fullText +=
-        `[Page ${pageNum}]\n${text}\n\n`;
-    }
+fullText =
+await extractImageText(file);
 
-    allDocuments.push({
+}else{
 
-       name:file.name,
+const arrayBuffer =
+await file.arrayBuffer();
 
-       content:fullText
+const pdf =
+await pdfjsLib.getDocument({
+data:arrayBuffer
+}).promise;
 
-    });
+for(
+let pageNum=1;
+pageNum<=pdf.numPages;
+pageNum++
+){
 
-    const list =
-document.getElementById("documentList");
+const page =
+await pdf.getPage(pageNum);
+
+const content =
+await page.getTextContent();
+
+const text =
+content.items
+.map(item=>item.str)
+.join(" ");
+
+fullText += text + "\n\n";
+
+}
+
+}
+
+allDocuments.push({
+
+name:file.name,
+
+content:fullText
+
+});
+
+const list =
+document.getElementById(
+"documentList"
+);
 
 const item =
-document.createElement("li");
+document.createElement(
+"li"
+);
 
-item.textContent = file.name;
+item.textContent =
+file.name;
 
 list.appendChild(item);
 
 }
-        extractedText =
-allDocuments.map(doc =>
+
+extractedText =
+allDocuments.map(doc=>
 
 `Document:
 ${doc.name}
@@ -259,20 +248,25 @@ ${doc.content}`
 
 ).join("\n\n");
 
-document.getElementById("output").innerHTML =
+document.getElementById(
+"output"
+).innerHTML =
 extractedText;
-        
-        document.getElementById("loader").style.display = "none";
 
-    } catch (error) {
-        
-        document.getElementById("loader").style.display = "none";
-        document.getElementById("output").innerHTML =
-            "ERROR:\n" + error.message;
+}catch(error){
 
-        console.error(error);
-    }
+document.getElementById(
+"output"
+).innerHTML =
+"ERROR:<br>" +
+error.message;
+
+console.error(error);
+
 }
+
+}
+ 
   async function analyzeDocument() {
 
     if (!extractedText) {
