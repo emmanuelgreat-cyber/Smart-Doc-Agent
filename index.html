@@ -259,8 +259,9 @@ console.error(error);
         alert("Please extract a PDF first.");
         return;
     }
-    document.getElementById("loader").style.display = "none";
-    document.getElementById("output").innerHTML =
+    document.getElementById("loader").style.display = "block";
+
+document.getElementById("output").innerHTML =
 "Analysing...";
 
     try {
@@ -304,10 +305,9 @@ ${extractedText.slice(0,3000)}`
 console.log(data);
 
 if (!data.choices) {
-    document.getElementById("output").value =
-        "API Error:\n" +
-        JSON.stringify(data, null, 2);
-
+    document.getElementById("output").innerHTML =
+"API Error:<br>" +
+JSON.stringify(data, null, 2);
     return;
 }
 
@@ -315,18 +315,8 @@ const answer =
 data.choices[0].message.content;
 
 chatHistory.push({
-role:"user",
-content:question
-});
-
-chatHistory.push({
-role: "user",
-content: String(question)
-});
-
-chatHistory.push({
-role: "assistant",
-content: String(answer)
+role:"assistant",
+content:String(answer)
 });
 
 
