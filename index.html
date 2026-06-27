@@ -384,14 +384,29 @@ content: "Answer questions about uploaded documents. Be concise and include sour
 ...chatHistory.filter(
 msg => typeof msg.content === "string"
 ),
-
+                         
 {
 role: "user",
-content: `${question}
+content: `Question:
+
+${question}
 
 Document:
 
-${extractedText.slice(0,3000)}`
+${extractedText.slice(0,3000)}
+
+Answer the question and also provide:
+
+📍 Source:
+Include the exact sentence or paragraph from the document that supports the answer.
+
+Format exactly:
+
+**Answer**
+(answer)
+
+**Source**
+(source text)`
 }
 
 ]
@@ -416,11 +431,13 @@ data.choices[0].message.content;
 
 document.getElementById("loader").style.display = "none";
 
-document.getElementById("output").innerHTML = answer
-.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>")
-.replace(/\*(.*?)\*/g,"<i>$1</i>")
+document.getElementById("output").innerHTML =
+answer
+.replace(/\*\*(.*?)\*\*/g,
+"<h3>$1</h3>")
+.replace(/\*(.*?)\*/g,
+"<i>$1</i>")
 .replace(/\n/g,"<br>");
-
     } catch(error){
 
 document.getElementById("loader").style.display = "none";
