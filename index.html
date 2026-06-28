@@ -359,6 +359,24 @@ document.getElementById("output").innerHTML =
 
     try {
 
+        const questionWords =
+question.toLowerCase().split(" ");
+
+const relevantText =
+extractedText
+.split("\n")
+.filter(line =>
+
+questionWords.some(word =>
+
+line.toLowerCase().includes(word)
+
+)
+
+)
+.join("\n")
+.slice(0,3000);
+
         document.getElementById("loader").style.display = "block";
         const response = await fetch(
             "https://api.groq.com/openai/v1/chat/completions",
@@ -377,36 +395,19 @@ document.getElementById("output").innerHTML =
                      messages: [
 
 {
-role: "system",
-content: "Answer questions about uploaded documents. Be concise and include source pages if possible."
-},
-
-...chatHistory.filter(
-msg => typeof msg.content === "string"
-),
-                         
-{
-role: "user",
-content: `Question:
+role:"user",
+content:`Question:
 
 ${question}
 
-Document:
+Relevant document sections:
 
-${extractedText.slice(0,3000)}
+${relevantText}
 
 Answer the question and also provide:
 
-📍 Source:
-Include the exact sentence or paragraph from the document that supports the answer.
-
-Format exactly:
-
-**Answer**
-(answer)
-
 **Source**
-(source text)`
+Include the exact sentence or paragraph used.`
 }
 
 ]
