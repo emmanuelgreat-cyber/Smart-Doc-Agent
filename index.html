@@ -82,15 +82,14 @@ transform:scale(0.9);
 
     </div>
     <hr>
-
-    <input
+    
+<input
 type="file"
 id="pdfFile"
 multiple
-accept=".pdf,image/*">
+accept=".pdf,image/*"
+onchange="extractText()">
     <br>
-
-    <button onclick="extractText()">Extract PDF</button>
 
     <button onclick="analyzeDocument()">
     Analyze Document
